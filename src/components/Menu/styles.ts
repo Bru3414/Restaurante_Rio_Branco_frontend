@@ -17,6 +17,7 @@ export const DivTabs = styled.div`
     border-top-left-radius: 8px;
     border-bottom: 1px solid ${colors.black};
     cursor: pointer;
+    font-size: 1.3em;
   }
 
   .active {

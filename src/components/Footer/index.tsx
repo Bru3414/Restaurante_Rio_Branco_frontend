@@ -12,7 +12,7 @@ const Footer = () => {
           </S.ButtonDiv>
         </div>
         <div>
-          <h3>NOS ACOMPANHAS NAS REDES SOCIAIS</h3>
+          <h3>NOS ACOMPANHE NAS REDES SOCIAIS</h3>
           <span>Facebook</span>
           <span>Instagram</span>
         </div>

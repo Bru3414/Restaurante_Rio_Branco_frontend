@@ -1,80 +1,82 @@
 import * as S from './styles'
 import Product from '../Product'
 import imgProduto from '../../assets/images/img_marmita.png'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useBuscaProdutosApiQuery } from '../../services/api'
+import { useDispatch, useSelector } from 'react-redux'
+import { atualizaProdutosStore } from '../../store/reducers/productMenu'
+import { Category } from '../../utils'
+import { RootReducer } from '../../store'
 
 const Menu = () => {
-  const [activeTab, setActiveTab] = useState('tabMarmitas')
+  const {
+    data: produtosApi,
+    isLoading: isLoadingBuscaProdutos,
+    isSuccess: isSuccessBuscaProdutos
+  } = useBuscaProdutosApiQuery()
+  const { items } = useSelector((state: RootReducer) => state.productMenu)
+  const dispatch = useDispatch()
+  const [activeTab, setActiveTab] = useState<Category>(
+    Object.values(Category)[0]
+  )
 
-  const handleTabMarmitas = () => {
-    setActiveTab('tabMarmitas')
+  useEffect(() => {
+    if (produtosApi) {
+      dispatch(atualizaProdutosStore(produtosApi))
+    }
+  }, [isSuccessBuscaProdutos])
+
+  const renderizaProdutos = (): JSX.Element => {
+    const produtos = items.filter((item) => item.category === activeTab)
+
+    if (produtos.length <= 0) {
+      return (
+        <S.DivContent>
+          <p>Desculpe, estamos sem produtos no momento</p>
+        </S.DivContent>
+      )
+    }
+
+    return (
+      <S.DivContent>
+        {produtos
+          .sort((a, b) => a.id - b.id)
+          .map((item) => (
+            <Product
+              key={item.id}
+              title={item.name}
+              description={item.description}
+              price={item.price}
+              img={item.image}
+            />
+          ))}
+      </S.DivContent>
+    )
   }
 
-  const handleTabBebidas = () => {
-    setActiveTab('tabBebidas')
+  const renderizaTabs = (): JSX.Element => {
+    const valuesCategory = Object.values(Category)
+
+    return (
+      <S.DivTabs>
+        {valuesCategory.map((category) => (
+          <div
+            key={category}
+            className={activeTab === category ? 'active' : ''}
+            onClick={() => setActiveTab(category)}
+          >
+            {category}
+          </div>
+        ))}
+      </S.DivTabs>
+    )
   }
 
   return (
     <div className="container">
       <S.Title>Nosso Cardápio</S.Title>
-      <S.DivTabs>
-        <div
-          className={activeTab === 'tabMarmitas' ? 'active' : ''}
-          onClick={handleTabMarmitas}
-        >
-          Marmitas
-        </div>
-        <div
-          className={activeTab === 'tabBebidas' ? 'active' : ''}
-          onClick={handleTabBebidas}
-        >
-          Bebidas
-        </div>
-      </S.DivTabs>
-      <S.DivContent>
-        {activeTab === 'tabMarmitas' ? (
-          <>
-            <Product
-              img={imgProduto}
-              title="Marmita Padrão"
-              description="Arroz, feijão, farofa, macarrão, 2 tipos de carne a escolha."
-              price={20.0}
-            />
-            <Product
-              img={imgProduto}
-              title="Marmita C/maionese"
-              description="Arroz, feijão, farofa, macarrão, maionese, 2 tipos de carne a escolha."
-              price={23.0}
-            />
-            <Product
-              img={imgProduto}
-              title="Marmita Especial"
-              description="Arroz, feijão, farofa, macarrão, maionese, 2 tipos de carne a escolha. +CARNE"
-              price={26.0}
-            />
-            <Product
-              img={imgProduto}
-              title="Marmita Padrão"
-              description="Arroz, feijão, farofa, macarrão, 2 tipos de carne a escolha."
-              price={20.0}
-            />
-            <Product
-              img={imgProduto}
-              title="Marmita C/maionese"
-              description="Arroz, feijão, farofa, macarrão, maionese, 2 tipos de carne a escolha."
-              price={23.0}
-            />
-            <Product
-              img={imgProduto}
-              title="Marmita Especial"
-              description="Arroz, feijão, farofa, macarrão, maionese, 2 tipos de carne a escolha. +CARNE"
-              price={26.0}
-            />
-          </>
-        ) : (
-          <div>Teste</div>
-        )}
-      </S.DivContent>
+      {renderizaTabs()}
+      {renderizaProdutos()}
     </div>
   )
 }

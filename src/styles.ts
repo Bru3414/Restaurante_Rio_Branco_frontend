@@ -11,7 +11,7 @@ const GlobalCSS = createGlobalStyle`
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    font-family: "Istok Web", serif;
+    font-family: "Oswald", serif;
   }
 
   .container {
