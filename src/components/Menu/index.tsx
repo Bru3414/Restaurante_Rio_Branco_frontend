@@ -44,10 +44,12 @@ const Menu = () => {
           .map((item) => (
             <Product
               key={item.id}
-              title={item.name}
+              name={item.name}
               description={item.description}
               price={item.price}
-              img={item.image}
+              image={item.image}
+              category={item.category}
+              id={item.id}
             />
           ))}
       </S.DivContent>

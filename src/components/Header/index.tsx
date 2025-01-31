@@ -8,6 +8,12 @@ const Header = () => {
         <S.TitleHeader className="container">
           Restaurante e Bistrô Rio Branco
         </S.TitleHeader>
+        <S.ButtonSair
+          type="button"
+          onClick={() => localStorage.removeItem('TOKEN_APLICACAO')}
+        >
+          Sair
+        </S.ButtonSair>
       </S.DivTitle>
       <S.imgHeader src={imgHeader} />
     </>

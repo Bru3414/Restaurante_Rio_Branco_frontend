@@ -7,13 +7,19 @@ import * as S from './styles'
 import { useEffect } from 'react'
 
 const Login = () => {
-  const [loginApi, { data, isSuccess, isLoading }] = useLoginMutation()
+  const [loginApi, { data, isSuccess, isLoading, isError }] = useLoginMutation()
 
   useEffect(() => {
     if (data) {
       localStorage.setItem('TOKEN_APLICACAO', data.token)
     }
   }, [isSuccess])
+
+  useEffect(() => {
+    if (isError) {
+      alert('erro')
+    }
+  }, [isError])
 
   const form = useFormik({
     initialValues: {

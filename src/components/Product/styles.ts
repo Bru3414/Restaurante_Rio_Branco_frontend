@@ -50,3 +50,44 @@ export const Card = styled.div`
     transition: all ease-in-out 300ms;
   }
 `
+export const ModalContent = styled.div`
+  display: flex;
+  column-gap: 2em;
+
+  textarea {
+    resize: none;
+    width: 100%;
+    height: 50%;
+    font-size: 1.6em;
+    outline: none;
+  }
+`
+export const TextButtonDiv = styled.form`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  div {
+    display: flex;
+    justify-content: space-between;
+    column-gap: 1em;
+
+    button {
+      border: 2px solid ${colors.black};
+      transition: all ease-in-out 200ms;
+      text-transform: uppercase;
+      padding: 1.2em;
+      font-size: 1.4em;
+      cursor: pointer;
+      border-radius: 8px;
+
+      &:hover {
+        border: 2px solid ${colors.black};
+        box-shadow: 0 0 10px ${colors.black};
+        background-color: ${colors.black};
+        color: ${colors.white};
+        transition: all ease-in-out 200ms;
+      }
+    }
+  }
+`

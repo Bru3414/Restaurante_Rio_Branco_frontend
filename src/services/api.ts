@@ -1,4 +1,12 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import {
+  Cart,
+  Product,
+  ProductQtd,
+  RequestLogin,
+  RequestSignup,
+  ResponseLogin
+} from '../types'
 
 const api = createApi({
   baseQuery: fetchBaseQuery({
@@ -30,10 +38,33 @@ const api = createApi({
         method: 'POST',
         body
       })
+    }),
+    buscaCartApi: builder.query<Cart, void>({
+      query: () => '/cart'
+    }),
+    includeProductInCartApi: builder.mutation<Cart, ProductQtd>({
+      query: (body) => ({
+        url: '/cart/add',
+        method: 'POST',
+        body
+      })
+    }),
+    removeProductInCardApi: builder.mutation<Cart, ProductQtd>({
+      query: (body) => ({
+        url: '/cart/remove',
+        method: 'POST',
+        body
+      })
     })
   })
 })
 
-export const { useBuscaProdutosApiQuery, useSignupMutation, useLoginMutation } =
-  api
+export const {
+  useBuscaProdutosApiQuery,
+  useSignupMutation,
+  useLoginMutation,
+  useBuscaCartApiQuery,
+  useIncludeProductInCartApiMutation,
+  useRemoveProductInCardApiMutation
+} = api
 export default api

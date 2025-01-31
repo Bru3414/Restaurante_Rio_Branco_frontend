@@ -7,6 +7,12 @@ export const parseToBrl = (amout = 0) => {
   }).format(amout)
 }
 
+export enum Role {
+  ROLE_CUSTOMER = 'ROLE_CUSTOMER',
+  ROLE_MODERATOR = 'ROLE_MODERATOR',
+  ROLE_ADMIN = 'ROLE_ADMIN'
+}
+
 export enum Category {
   MARMITA = 'MARMITA',
   BEBIDA = 'BEBIDA'

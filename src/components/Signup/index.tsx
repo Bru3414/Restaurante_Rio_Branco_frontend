@@ -13,7 +13,7 @@ const Signup = () => {
 
   useEffect(() => {
     if (data) {
-      console.log(data)
+      localStorage.setItem('TOKEN_APLICACAO', data.token)
       form.resetForm()
     }
   }, [isSuccess])
