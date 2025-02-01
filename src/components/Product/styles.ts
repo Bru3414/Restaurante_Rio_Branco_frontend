@@ -60,6 +60,8 @@ export const ModalContent = styled.div`
     height: 50%;
     font-size: 1.6em;
     outline: none;
+    padding: 4px;
+    border-radius: 4px;
   }
 `
 export const TextButtonDiv = styled.form`

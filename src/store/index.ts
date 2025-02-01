@@ -3,6 +3,7 @@ import productMenuReducer from './reducers/productMenu'
 import customerReducer from './reducers/custumer'
 import userReducer from './reducers/user'
 import cartReducer from './reducers/cart'
+import errorReducer from './reducers/error'
 import api from '../services/api'
 
 export const store = configureStore({
@@ -11,6 +12,7 @@ export const store = configureStore({
     customer: customerReducer,
     user: userReducer,
     cart: cartReducer,
+    error: errorReducer,
     [api.reducerPath]: api.reducer
   },
   middleware: (getDefaultMiddleware) =>

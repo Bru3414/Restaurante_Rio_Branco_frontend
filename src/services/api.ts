@@ -42,7 +42,7 @@ const api = createApi({
     buscaCartApi: builder.query<Cart, void>({
       query: () => '/cart'
     }),
-    includeProductInCartApi: builder.mutation<Cart, ProductQtd>({
+    includeProductInCartApi: builder.mutation<Cart, ProductQtd | Error>({
       query: (body) => ({
         url: '/cart/add',
         method: 'POST',

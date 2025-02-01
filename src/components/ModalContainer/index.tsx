@@ -3,13 +3,21 @@ import * as S from './styles'
 type Props = {
   children: JSX.Element
   isVisible: boolean
-  onClick: VoidFunction
+  backColor?: boolean
+  onClick?: VoidFunction
 }
 
-const ModalContainer = ({ children, isVisible, onClick }: Props) => {
+const ModalContainer = ({
+  children,
+  isVisible,
+  onClick,
+  backColor = true
+}: Props) => {
   return (
     <S.Modal className={isVisible ? 'visible' : ''}>
-      <S.ModalContent>{children}</S.ModalContent>
+      <S.ModalContent backColor={backColor} className={isVisible ? 'box' : ''}>
+        {children}
+      </S.ModalContent>
       <div className="overlay" onClick={onClick} />
     </S.Modal>
   )

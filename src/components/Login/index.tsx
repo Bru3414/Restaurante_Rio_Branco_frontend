@@ -5,13 +5,22 @@ import InputMask from 'react-input-mask'
 import { useLoginMutation } from '../../services/api'
 import * as S from './styles'
 import { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { atualizaTokenStore } from '../../store/reducers/user'
+import { Navigate } from 'react-router-dom'
+import { clearError } from '../../store/reducers/error'
 
 const Login = () => {
+  const dispatch = useDispatch()
   const [loginApi, { data, isSuccess, isLoading, isError }] = useLoginMutation()
 
   useEffect(() => {
+    dispatch(clearError())
+  }, [])
+
+  useEffect(() => {
     if (data) {
-      localStorage.setItem('TOKEN_APLICACAO', data.token)
+      dispatch(atualizaTokenStore(data.token))
     }
   }, [isSuccess])
 
@@ -50,6 +59,10 @@ const Login = () => {
     return ''
   }
 
+  if (isSuccess && data) {
+    return <Navigate to={'/'} />
+  }
+
   return (
     <S.LoginSignupContainer>
       <S.FormContainer onSubmit={form.handleSubmit}>
@@ -83,7 +96,7 @@ const Login = () => {
         <S.Button type="submit">Entrar</S.Button>
         <S.LinksContainer>
           <S.LinkA to={'/signup'}>Não tem uma conta? Crie aqui!</S.LinkA>
-          <S.LinkA to={'/'}>Esqueci minha senha</S.LinkA>
+          <S.LinkA to={'/'}>Volta para o cardápio</S.LinkA>
         </S.LinksContainer>
       </S.FormContainer>
     </S.LoginSignupContainer>

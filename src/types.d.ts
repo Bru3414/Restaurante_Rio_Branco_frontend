@@ -1,3 +1,4 @@
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react'
 import { ListFormat } from 'typescript'
 import { Bairro, City, Role } from './utils'
 
@@ -84,4 +85,16 @@ declare type Address = {
   complement?: string
   city: City
   customer: Customer.id
+}
+
+declare type Error = {
+  path: string
+  error: string
+  message: string
+  timestamp: number
+  status: number
+}
+
+type ApiError = FetchBaseQueryError & {
+  data?: Error
 }

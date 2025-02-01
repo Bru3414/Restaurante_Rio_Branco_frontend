@@ -7,13 +7,18 @@ import { CompleTelContainer, InputEndContainer } from './styles'
 import { Bairro, City } from '../../utils'
 import { useSignupMutation } from '../../services/api'
 import { useEffect } from 'react'
+import { atualizaTokenStore } from '../../store/reducers/user'
+import { useDispatch } from 'react-redux'
+import { Navigate } from 'react-router-dom'
+import Loader from '../Loader'
 
 const Signup = () => {
   const [signupApi, { data, isSuccess, isLoading }] = useSignupMutation()
+  const dispatch = useDispatch()
 
   useEffect(() => {
     if (data) {
-      localStorage.setItem('TOKEN_APLICACAO', data.token)
+      dispatch(atualizaTokenStore(data.token))
       form.resetForm()
     }
   }, [isSuccess])
@@ -76,10 +81,6 @@ const Signup = () => {
     }
   })
 
-  const resetForm = () => {
-    form.resetForm()
-  }
-
   const getErrorMessageEntrega = (fieldName: string, message?: string) => {
     const isTouched = fieldName in form.touched
     const isInvalid = fieldName in form.errors
@@ -115,130 +116,137 @@ const Signup = () => {
     )
   }
 
+  if (isSuccess && data) {
+    return <Navigate to={'/'} />
+  }
+
   return (
-    <S.LoginSignupContainer>
-      <S.FormContainer onSubmit={form.handleSubmit}>
-        <h1>Cadastro</h1>
-        <S.InputContainer>
-          <label htmlFor="name">Nome</label>
-          <input
-            name="name"
-            id="name"
-            value={form.values.name}
-            onChange={form.handleChange}
-            onBlur={form.handleBlur}
-            type="text"
-          />
-          <small>{getErrorMessageEntrega('name', form.errors.name)}</small>
-        </S.InputContainer>
-        <S.InputContainer>
-          <label htmlFor="email">Email</label>
-          <input
-            name="email"
-            id="email"
-            value={form.values.email}
-            onChange={form.handleChange}
-            onBlur={form.handleBlur}
-            type="email"
-          />
-          <small>{getErrorMessageEntrega('email', form.errors.email)}</small>
-        </S.InputContainer>
-        <S.InputContainer>
-          <label htmlFor="password">Senha</label>
-          <input
-            name="password"
-            id="password"
-            value={form.values.password}
-            onChange={form.handleChange}
-            onBlur={form.handleBlur}
-            type="password"
-          />
-          <small>
-            {getErrorMessageEntrega('password', form.errors.password)}
-          </small>
-        </S.InputContainer>
-        <h2>Endereço</h2>
-        <S.InputContainer>
-          <label htmlFor="address">Endereço</label>
-          <input
-            name="address"
-            id="address"
-            value={form.values.address}
-            onChange={form.handleChange}
-            onBlur={form.handleBlur}
-            type="text"
-          />
-          <small>
-            {getErrorMessageEntrega('address', form.errors.address)}
-          </small>
-        </S.InputContainer>
-        <InputEndContainer>
+    <>
+      <S.LoginSignupContainer>
+        <S.FormContainer onSubmit={form.handleSubmit}>
+          <h1>Cadastro</h1>
           <S.InputContainer>
-            <label htmlFor="number">Número</label>
-            <InputMask
-              maskChar=""
-              mask="999999"
-              name="number"
-              id="number"
-              value={form.values.number}
-              onChange={form.handleChange}
-              onBlur={form.handleBlur}
-              type="text"
-            />
-            <small>
-              {getErrorMessageEntrega('number', form.errors.number)}
-            </small>
-          </S.InputContainer>
-          {renderizaSelectBairro()}
-          <S.InputContainer>
-            <label htmlFor="telefone">Telefone</label>
-            <InputMask
-              maskChar=""
-              mask="(99) 99999-9999"
-              name="telefone"
-              id="telefone"
-              value={form.values.telefone}
-              onChange={form.handleChange}
-              onBlur={form.handleBlur}
-              type="text"
-            />
-            <small>
-              {getErrorMessageEntrega('telefone', form.errors.telefone)}
-            </small>
-          </S.InputContainer>
-        </InputEndContainer>
-        <CompleTelContainer>
-          <S.InputContainer>
-            <label htmlFor="complement">Complemento</label>
+            <label htmlFor="name">Nome</label>
             <input
-              name="complement"
-              id="complement"
-              value={form.values.complement}
+              name="name"
+              id="name"
+              value={form.values.name}
+              onChange={form.handleChange}
+              onBlur={form.handleBlur}
+              type="text"
+            />
+            <small>{getErrorMessageEntrega('name', form.errors.name)}</small>
+          </S.InputContainer>
+          <S.InputContainer>
+            <label htmlFor="email">Email</label>
+            <input
+              name="email"
+              id="email"
+              value={form.values.email}
+              onChange={form.handleChange}
+              onBlur={form.handleBlur}
+              type="email"
+            />
+            <small>{getErrorMessageEntrega('email', form.errors.email)}</small>
+          </S.InputContainer>
+          <S.InputContainer>
+            <label htmlFor="password">Senha</label>
+            <input
+              name="password"
+              id="password"
+              value={form.values.password}
+              onChange={form.handleChange}
+              onBlur={form.handleBlur}
+              type="password"
+            />
+            <small>
+              {getErrorMessageEntrega('password', form.errors.password)}
+            </small>
+          </S.InputContainer>
+          <h2>Endereço</h2>
+          <S.InputContainer>
+            <label htmlFor="address">Endereço</label>
+            <input
+              name="address"
+              id="address"
+              value={form.values.address}
               onChange={form.handleChange}
               onBlur={form.handleBlur}
               type="text"
             />
             <small>
-              {getErrorMessageEntrega('complement', form.errors.complement)}
+              {getErrorMessageEntrega('address', form.errors.address)}
             </small>
           </S.InputContainer>
-          <S.InputContainer>
-            <label htmlFor="city">Cidade</label>
-            <input
-              disabled={true}
-              name="city"
-              id="city"
-              value={form.values.city}
-              type="text"
-            />
-          </S.InputContainer>
-        </CompleTelContainer>
-        <S.Button type="submit">Cadastrar</S.Button>
-        <S.LinksContainer>
-          <S.LinkA to={'/signin'}>Já tem uma conta? Entre aqui!</S.LinkA>
-        </S.LinksContainer>
-      </S.FormContainer>
-    </S.LoginSignupContainer>
+          <InputEndContainer>
+            <S.InputContainer>
+              <label htmlFor="number">Número</label>
+              <InputMask
+                maskChar=""
+                mask="999999"
+                name="number"
+                id="number"
+                value={form.values.number}
+                onChange={form.handleChange}
+                onBlur={form.handleBlur}
+                type="text"
+              />
+              <small>
+                {getErrorMessageEntrega('number', form.errors.number)}
+              </small>
+            </S.InputContainer>
+            {renderizaSelectBairro()}
+            <S.InputContainer>
+              <label htmlFor="telefone">Telefone</label>
+              <InputMask
+                maskChar=""
+                mask="(99) 99999-9999"
+                name="telefone"
+                id="telefone"
+                value={form.values.telefone}
+                onChange={form.handleChange}
+                onBlur={form.handleBlur}
+                type="text"
+              />
+              <small>
+                {getErrorMessageEntrega('telefone', form.errors.telefone)}
+              </small>
+            </S.InputContainer>
+          </InputEndContainer>
+          <CompleTelContainer>
+            <S.InputContainer>
+              <label htmlFor="complement">Complemento</label>
+              <input
+                name="complement"
+                id="complement"
+                value={form.values.complement}
+                onChange={form.handleChange}
+                onBlur={form.handleBlur}
+                type="text"
+              />
+              <small>
+                {getErrorMessageEntrega('complement', form.errors.complement)}
+              </small>
+            </S.InputContainer>
+            <S.InputContainer>
+              <label htmlFor="city">Cidade</label>
+              <input
+                disabled={true}
+                name="city"
+                id="city"
+                value={form.values.city}
+                type="text"
+              />
+            </S.InputContainer>
+          </CompleTelContainer>
+          <S.Button type="submit">Cadastrar</S.Button>
+          <S.LinksContainer>
+            <S.LinkA to={'/signin'}>Já tem uma conta? Entre aqui!</S.LinkA>
+          </S.LinksContainer>
+        </S.FormContainer>
+      </S.LoginSignupContainer>
+      <Loader isVisible={isLoading} />
+    </>
   )
 }
 

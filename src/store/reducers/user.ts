@@ -1,32 +1,27 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { ResponseLogin } from '../../types'
 
 type userState = {
-  user: ResponseLogin
+  token: string
 }
 
 const initialState: userState = {
-  user: {
-    email: '',
-    id: -1,
-    name: '',
-    roles: [],
-    token: '',
-    type: ''
-  }
+  token: ''
 }
 
 const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    atualizaUserStore: (state, action: PayloadAction<ResponseLogin>) => {
-      state.user = action.payload
-      localStorage.setItem('TOKEN_APLICACAO', action.payload.token)
-      localStorage.setItem('USER_ID', action.payload.id.toString())
+    atualizaTokenStore: (state, action: PayloadAction<string>) => {
+      state.token = action.payload
+      localStorage.setItem('TOKEN_APLICACAO', action.payload)
+    },
+    deleteTokenStore: (state) => {
+      state.token = ''
+      localStorage.removeItem('TOKEN_APLICACAO')
     }
   }
 })
 
-export const { atualizaUserStore } = userSlice.actions
+export const { atualizaTokenStore, deleteTokenStore } = userSlice.actions
 export default userSlice.reducer
