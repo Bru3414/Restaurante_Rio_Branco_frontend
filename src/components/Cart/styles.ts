@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import { colors } from '../../styles'
 import { Modal } from '../ModalContainer/styles'
+import { Link } from 'react-router-dom'
 
 export const ModalContainerCart = styled(Modal)`
   justify-content: flex-end;
@@ -41,85 +42,6 @@ export const CardDivGap = styled.div`
   row-gap: 16px;
 `
 
-export const CardProduto = styled.div`
-  width: 100%;
-  position: relative;
-  display: flex;
-  column-gap: 24px;
-  border-bottom: 3px solid ${colors.black};
-  border-bottom-style: dotted;
-  padding: 8px;
-  align-items: center;
-
-  img {
-    width: 6.5em;
-    height: 6.5em;
-    object-fit: cover;
-    border-radius: 50%;
-    border: 2px solid ${colors.black};
-  }
-
-  h3 {
-    text-transform: uppercase;
-  }
-
-  p {
-    text-transform: capitalize;
-  }
-`
-export const QtdProdutos = styled.div`
-  position: absolute;
-  top: 4px;
-  right: 4px;
-  border: 1px solid ${colors.black};
-  border-radius: 25px;
-  background-color: #fff;
-  width: 81px;
-  height: 30px;
-  border-radius: 25px;
-  margin-bottom: 4px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  input {
-    width: 2em;
-
-    &:disabled {
-      text-align: center;
-      border: none;
-      background-color: #fff;
-    }
-  }
-
-  span {
-    width: 24px;
-    line-height: 24px;
-    display: block;
-    text-align: center;
-    font-size: 29px;
-    color: #ff0d0d;
-    cursor: pointer;
-    height: 30px;
-  }
-
-  span {
-    &:first-child {
-      margin-bottom: 4px;
-    }
-
-    &:last-child {
-      color: #00b400;
-      margin-top: 4px;
-    }
-  }
-`
-export const Price = styled.span`
-  font-size: 1.1em;
-  margin: 8px 4px 0 0;
-  font-weight: bold;
-`
-
 export const FinalizarDiv = styled.div`
   padding: 16px;
   display: flex;
@@ -136,5 +58,25 @@ export const ValorTotal = styled.div`
 
   span {
     font-size: 1.5em;
+  }
+`
+export const ButtonCheckout = styled(Link)`
+  border-radius: 8px;
+  padding: 4px;
+  font-size: 2em;
+  cursor: pointer;
+  border: 2px solid ${colors.black};
+  transition: all ease-in-out 200ms;
+  background-color: #fff;
+  text-decoration: none;
+  text-align: center;
+  color: ${colors.black};
+
+  &:hover {
+    border: 2px solid ${colors.black};
+    box-shadow: 0 0 10px ${colors.black};
+    background-color: ${colors.black};
+    color: ${colors.white};
+    transition: all ease-in-out 200ms;
   }
 `

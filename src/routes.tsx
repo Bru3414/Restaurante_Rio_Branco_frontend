@@ -8,6 +8,8 @@ import { useEffect } from 'react'
 import { atualizaTokenStore } from './store/reducers/user'
 import { RootReducer } from './store'
 import { clearError } from './store/reducers/error'
+import Checkout from './components/Checkout'
+import CheckoutPage from './pages/Checkout'
 
 const Rotas = () => {
   const { error } = useSelector((state: RootReducer) => state.error)
@@ -32,6 +34,7 @@ const Rotas = () => {
           </>
         }
       />
+      <Route path="/checkout" element={<CheckoutPage />} />
       <Route path="/signin" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
     </Routes>

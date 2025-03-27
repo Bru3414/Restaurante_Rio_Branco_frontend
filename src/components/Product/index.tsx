@@ -86,23 +86,9 @@ const Product = ({
     }),
     onSubmit: (values) => {
       includeProduct({
-        cart: cart,
-        id: -1,
+        productId: id,
         quantity: 1,
-        obs: values.obs.toLowerCase().trim(),
-        price: price,
-        product: {
-          category: category,
-          description: description,
-          id: id,
-          name: name,
-          price: price,
-          image: {
-            id: image.id,
-            name: image.name,
-            url: image.url
-          }
-        }
+        obs: values.obs
       })
     }
   })

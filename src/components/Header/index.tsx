@@ -3,10 +3,12 @@ import imgHeader from '../../assets/images/img_header.png'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteTokenStore } from '../../store/reducers/user'
 import { RootReducer } from '../../store'
+import { useNavigate } from 'react-router-dom'
 
 const Header = () => {
   const { token } = useSelector((state: RootReducer) => state.user)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   return (
     <>
@@ -20,6 +22,7 @@ const Header = () => {
               type="submit"
               onClick={() => {
                 dispatch(deleteTokenStore())
+                navigate('/')
                 window.location.reload()
               }}
             >

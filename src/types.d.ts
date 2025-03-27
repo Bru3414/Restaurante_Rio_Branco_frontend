@@ -64,6 +64,12 @@ declare type ProductQtd = {
   price: number
 }
 
+declare type ProductQtdRequest = {
+  productId: number
+  quantity: number
+  obs?: string
+}
+
 declare type Cart = {
   id: number
   customer: Customer.id
@@ -97,4 +103,10 @@ declare type Error = {
 
 type ApiError = FetchBaseQueryError & {
   data?: Error
+}
+
+declare type createOrderRequest = {
+  address: Address
+  payment: string
+  troco?: number
 }
