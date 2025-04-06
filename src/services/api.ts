@@ -1,6 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import {
+  Address,
   Cart,
+  createAddressRequest,
   createOrderRequest,
   Product,
   ProductQtd,
@@ -64,6 +66,22 @@ const api = createApi({
         method: 'POST',
         body
       })
+    }),
+    findAddressApi: builder.query<Address[], void>({
+      query: () => '/address'
+    }),
+    setAddressSelectedApi: builder.mutation<void, number>({
+      query: (id) => ({
+        url: `/address/set-selected/${id}`,
+        method: 'PUT'
+      })
+    }),
+    createNewAddressApi: builder.mutation<void, createAddressRequest>({
+      query: (body) => ({
+        url: '/address/create-new-address',
+        method: 'POST',
+        body
+      })
     })
   })
 })
@@ -75,6 +93,9 @@ export const {
   useBuscaCartApiQuery,
   useIncludeProductInCartApiMutation,
   useRemoveProductInCardApiMutation,
-  useCreateNewOrderApiMutation
+  useCreateNewOrderApiMutation,
+  useFindAddressApiQuery,
+  useSetAddressSelectedApiMutation,
+  useCreateNewAddressApiMutation
 } = api
 export default api

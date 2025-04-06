@@ -84,7 +84,9 @@ declare type Customer = {
 }
 
 declare type Address = {
-  id?: number
+  id: number
+  isMain: boolean
+  isSelected: boolean
   address: string
   number: string
   bairro: Bairro
@@ -109,4 +111,11 @@ declare type createOrderRequest = {
   address: Address
   payment: string
   troco?: number
+}
+
+declare type createAddressRequest = {
+  address: string
+  number: string
+  bairro: string
+  complement: string
 }

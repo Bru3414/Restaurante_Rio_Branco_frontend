@@ -48,6 +48,7 @@ export const Modal = styled.div`
 `
 export const ModalContent = styled.div<Props>`
   max-width: 40vw;
+  min-width: 30vw;
   position: relative;
   z-index: 1;
   background-color: ${(props) =>

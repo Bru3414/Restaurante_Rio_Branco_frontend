@@ -4,6 +4,7 @@ import customerReducer from './reducers/custumer'
 import userReducer from './reducers/user'
 import cartReducer from './reducers/cart'
 import errorReducer from './reducers/error'
+import addressModalReducer from './reducers/addressModal'
 import api from '../services/api'
 
 export const store = configureStore({
@@ -13,6 +14,7 @@ export const store = configureStore({
     user: userReducer,
     cart: cartReducer,
     error: errorReducer,
+    addressModal: addressModalReducer,
     [api.reducerPath]: api.reducer
   },
   middleware: (getDefaultMiddleware) =>
