@@ -108,6 +108,7 @@ type ApiError = FetchBaseQueryError & {
 }
 
 declare type createOrderRequest = {
+  typeDelivery: string
   payment: string
   troco?: string
 }

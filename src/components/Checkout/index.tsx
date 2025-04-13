@@ -82,11 +82,19 @@ const Checkout = () => {
     }),
     onSubmit: (values) => {
       createNewOrderApi({
+        typeDelivery: values.delivery,
         payment: values.payment,
         troco: values.troco
       })
     }
   })
+
+  const confirmaPedido = () => {
+    if (form.values.delivery === 'LOCAL') {
+      form.values.payment = 'LOCAL'
+    }
+    form.handleSubmit
+  }
 
   const getErrorMessageEntrega = (fieldName: string, message?: string) => {
     const isTouched = fieldName in form.touched
@@ -98,12 +106,12 @@ const Checkout = () => {
     return ''
   }
 
-  const getTotalValor = (): string => {
+  const getTotalValor = (n: number): string => {
     let valor = 0
     cartStore.products.forEach((item) => {
       valor += item.price
     })
-    return parseToBrl(valor)
+    return parseToBrl(valor + n)
   }
 
   return (
@@ -197,7 +205,7 @@ const Checkout = () => {
           <S.AmountDiv>
             <S.Amount>
               <span className="dotted-text">Subtotal:</span>
-              <span>{getTotalValor()}</span>
+              <span>{getTotalValor(0)}</span>
             </S.Amount>
             {form.values.delivery == 'DELIVERY' && (
               <S.Amount>
@@ -208,7 +216,7 @@ const Checkout = () => {
             <span className="dotted"></span>
             <S.Amount>
               <span className="dotted-text">Total do pedido:</span>
-              <span>R$ 35,00</span>
+              <span>{getTotalValor(7)}</span>
             </S.Amount>
           </S.AmountDiv>
           <S.ButtonsDiv>
@@ -219,7 +227,7 @@ const Checkout = () => {
             >
               Voltar
             </S.Button>
-            <S.Button confirmar={true} type="submit">
+            <S.Button confirmar={true} onClick={() => confirmaPedido()}>
               Confirmar pedido
             </S.Button>
           </S.ButtonsDiv>
