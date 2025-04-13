@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import {
   Address,
+  AddressSelectedResponse,
   Cart,
   createAddressRequest,
   createOrderRequest,
@@ -60,7 +61,7 @@ const api = createApi({
         body
       })
     }),
-    createNewOrderApi: builder.mutation<any, createOrderRequest>({
+    createNewOrderApi: builder.mutation<void, createOrderRequest>({
       query: (body) => ({
         url: '/order/new-order',
         method: 'POST',
@@ -70,7 +71,7 @@ const api = createApi({
     findAddressApi: builder.query<Address[], void>({
       query: () => '/address'
     }),
-    setAddressSelectedApi: builder.mutation<void, number>({
+    setAddressSelectedApi: builder.mutation<AddressSelectedResponse, number>({
       query: (id) => ({
         url: `/address/set-selected/${id}`,
         method: 'PUT'

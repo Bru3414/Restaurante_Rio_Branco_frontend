@@ -108,9 +108,8 @@ type ApiError = FetchBaseQueryError & {
 }
 
 declare type createOrderRequest = {
-  address: Address
   payment: string
-  troco?: number
+  troco?: string
 }
 
 declare type createAddressRequest = {
@@ -118,4 +117,12 @@ declare type createAddressRequest = {
   number: string
   bairro: string
   complement: string
+}
+
+declare type AddressSelectedResponse = {
+  address: string
+  number: string
+  bairro: Bairro
+  complement?: string
+  city: City
 }

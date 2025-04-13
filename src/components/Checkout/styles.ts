@@ -9,6 +9,7 @@ export const CheckoutDiv = styled.div`
   background-color: ${colors.white};
   padding: 24px;
   border-radius: 8px;
+  margin-top: 40px;
 `
 
 export const Form = styled.form`
@@ -100,5 +101,5 @@ export const Button = styled.button<PropsButton>`
   font-size: 1.8em;
   border-radius: 8px;
   cursor: pointer;
-  background-color: ${(props) => (props.confirmar ? 'green' : colors.black)};
+  background-color: ${(props) => (props.confirmar ? 'green' : colors.gray)};
 `

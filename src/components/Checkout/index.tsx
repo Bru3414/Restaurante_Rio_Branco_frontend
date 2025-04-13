@@ -8,10 +8,16 @@ import { parseToBrl } from '../../utils'
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import AddressModal from '../AddressModal'
-import { useFindAddressApiQuery } from '../../services/api'
+import {
+  useCreateNewOrderApiMutation,
+  useFindAddressApiQuery
+} from '../../services/api'
 import { Address } from '../../types'
 import Loader from '../Loader'
-import { handleIsOpen } from '../../store/reducers/addressModal'
+import {
+  handleIsOpen,
+  setAddressSelected
+} from '../../store/reducers/addressModal'
 
 const Checkout = () => {
   const {
@@ -20,15 +26,24 @@ const Checkout = () => {
     isSuccess: isSuccessAddress,
     refetch: refetchFindAddress
   } = useFindAddressApiQuery()
+  const [
+    createNewOrderApi,
+    { isSuccess: isSuccessCreateNewOrder, isLoading: isLoadingCreateNewOrder }
+  ] = useCreateNewOrderApiMutation()
   const { cart: cartStore, isOpen } = useSelector(
     (state: RootReducer) => state.cart
   )
-  const { isOpen: isOpenAddressModal } = useSelector(
+  const { isOpen: isOpenAddressModal, addressSelected } = useSelector(
     (state: RootReducer) => state.addressModal
   )
   const navigate = useNavigate()
-  const [addressSelected, setAddressSelected] = useState<Address>()
   const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (isSuccessCreateNewOrder) {
+      navigate('/')
+    }
+  }, [isSuccessCreateNewOrder])
 
   useEffect(() => {
     if (!isOpenAddressModal) {
@@ -41,8 +56,15 @@ const Checkout = () => {
     if (isSuccessAddress) {
       const addressSelected = address.find((item) => item.isSelected === true)
       if (addressSelected) {
-        setAddressSelected(addressSelected)
-        console.log(addressSelected)
+        dispatch(
+          setAddressSelected({
+            address: addressSelected.address,
+            bairro: addressSelected.bairro,
+            city: addressSelected.city,
+            number: addressSelected.number,
+            complement: addressSelected.complement
+          })
+        )
       }
     }
   }, [isSuccessAddress])
@@ -59,7 +81,10 @@ const Checkout = () => {
       troco: Yup.string().max(40, 'Tamanho máximo excedido')
     }),
     onSubmit: (values) => {
-      console.log('')
+      createNewOrderApi({
+        payment: values.payment,
+        troco: values.troco
+      })
     }
   })
 
@@ -98,7 +123,7 @@ const Checkout = () => {
             >
               <option value="">--- Selecione a forma de entrega ---</option>
               <option value="DELIVERY">Entrega em domicílio</option>
-              <option value="ENTREGA">Retirada no local</option>
+              <option value="LOCAL">Retirada no local</option>
             </select>
             <S.Error>
               {getErrorMessageEntrega('delivery', form.errors.delivery)}
@@ -128,38 +153,47 @@ const Checkout = () => {
           </S.AddressDiv>
           <S.TypeDeliveryPaymentDiv>
             <h2>Forma de pagamento</h2>
-            <select
-              name="payment"
-              id="payment"
-              value={form.values.payment}
-              onChange={form.handleChange}
-              onBlur={form.handleBlur}
-            >
-              <option value="">--- Selecione a forma de pagamento ---</option>
-              <option value="DINHEIRO">Dinheiro</option>
-              <option value="CARTAO">Cartão</option>
-              <option value="PIX">PIX</option>
-            </select>
-            <S.Error>
-              {getErrorMessageEntrega('payment', form.errors.payment)}
-            </S.Error>
+            {form.values.delivery == 'DELIVERY' ? (
+              <>
+                <select
+                  name="payment"
+                  id="payment"
+                  value={form.values.payment}
+                  onChange={form.handleChange}
+                  onBlur={form.handleBlur}
+                >
+                  <option value="">
+                    --- Selecione a forma de pagamento ---
+                  </option>
+                  <option value="DINHEIRO">Dinheiro (Entregador)</option>
+                  <option value="CARTAO">Cartão (Entregador)</option>
+                  <option value="PIX">PIX</option>
+                </select>
+                <S.Error>
+                  {getErrorMessageEntrega('payment', form.errors.payment)}
+                </S.Error>
+              </>
+            ) : (
+              <p>Pagamento no local</p>
+            )}
           </S.TypeDeliveryPaymentDiv>
-          {form.values.payment == 'DINHEIRO' && (
-            <S.Troco>
-              <h3>Precisa de troco?</h3>
-              <input
-                name="troco"
-                value={form.values.troco}
-                onChange={form.handleChange}
-                onBlur={form.handleBlur}
-                type="text"
-                placeholder="Exemplo: Troco para R$ 50,00"
-              />
-              <S.Error>
-                {getErrorMessageEntrega('troco', form.errors.troco)}
-              </S.Error>
-            </S.Troco>
-          )}
+          {form.values.payment == 'DINHEIRO' &&
+            form.values.delivery != 'LOCAL' && (
+              <S.Troco>
+                <h3>Precisa de troco?</h3>
+                <input
+                  name="troco"
+                  value={form.values.troco}
+                  onChange={form.handleChange}
+                  onBlur={form.handleBlur}
+                  type="text"
+                  placeholder="Exemplo: Troco para R$ 100,00"
+                />
+                <S.Error>
+                  {getErrorMessageEntrega('troco', form.errors.troco)}
+                </S.Error>
+              </S.Troco>
+            )}
           <S.AmountDiv>
             <S.Amount>
               <span className="dotted-text">Subtotal:</span>
@@ -192,7 +226,7 @@ const Checkout = () => {
         </S.Form>
       </S.CheckoutDiv>
       <AddressModal />
-      <Loader isVisible={isLoadingAddress} />
+      <Loader isVisible={isLoadingAddress || isLoadingCreateNewOrder} />
     </>
   )
 }

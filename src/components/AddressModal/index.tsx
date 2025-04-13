@@ -9,7 +9,10 @@ import * as S from './styles'
 import Loader from '../Loader'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootReducer } from '../../store'
-import { handleIsOpen } from '../../store/reducers/addressModal'
+import {
+  handleIsOpen,
+  setAddressSelected
+} from '../../store/reducers/addressModal'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { Bairro, City } from '../../utils'
@@ -26,6 +29,7 @@ const AddressModal = () => {
   const [
     setAddressSelectedApi,
     {
+      data: addressSelected,
       isSuccess: isSuccessSetAddressSelected,
       isLoading: isLoadingAddressSelected
     }
@@ -52,7 +56,16 @@ const AddressModal = () => {
   }, [isSuccessAddress])
 
   useEffect(() => {
-    if (isSuccessSetAddressSelected) {
+    if (isSuccessSetAddressSelected && addressSelected) {
+      dispatch(
+        setAddressSelected({
+          address: addressSelected.address,
+          bairro: addressSelected.bairro,
+          city: addressSelected.city,
+          number: addressSelected.number,
+          complement: addressSelected.complement
+        })
+      )
       dispatch(handleIsOpen(false))
     }
   }, [isSuccessSetAddressSelected])
@@ -202,28 +215,31 @@ const AddressModal = () => {
   const renderizaSelectAddress = (): JSX.Element => {
     return (
       <div>
-        <ul>
+        <S.List>
           {address &&
-            address.map((item) => (
-              <S.Item key={item.id}>
-                <label htmlFor={item.id.toString()}>
-                  {item.address}, nº {item.number} -{' '}
-                  {item.bairro.replaceAll('_', ' ')} -{' '}
-                  {item.city.replace('_', '/')}
-                  {item.complement && ` (${item.complement})`}
-                </label>
-                <input
-                  id={item.id.toString()}
-                  type="radio"
-                  checked={selected === item.id}
-                  onClick={() => setSelected(item.id)}
-                />
-                <span
-                  className="checkmark"
-                  onClick={() => setSelected(item.id)}
-                ></span>
-              </S.Item>
-            ))}
+            [...address]
+              .sort((a, b) => a.id - b.id)
+              .map((item) => (
+                <S.Item key={item.id} onClick={() => setSelected(item.id)}>
+                  <label htmlFor={item.id.toString()}>
+                    {item.address}, nº {item.number} -{' '}
+                    {item.bairro.replaceAll('_', ' ')} -{' '}
+                    {item.city.replace('_', '/')}
+                    {item.complement && ` (${item.complement})`}
+                  </label>
+                  <div>
+                    <input
+                      id={item.id.toString()}
+                      type="radio"
+                      checked={selected === item.id}
+                    />
+                    <span
+                      className="checkmark"
+                      onClick={() => setSelected(item.id)}
+                    ></span>
+                  </div>
+                </S.Item>
+              ))}
           <S.ButtonsDiv>
             <div>
               <S.Button
@@ -243,7 +259,7 @@ const AddressModal = () => {
               Confirmar
             </S.Button>
           </S.ButtonsDiv>
-        </ul>
+        </S.List>
       </div>
     )
   }

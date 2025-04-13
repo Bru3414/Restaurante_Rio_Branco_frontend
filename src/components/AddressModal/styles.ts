@@ -6,20 +6,43 @@ type Props = {
   typeButton: 'CONFIRM' | 'CANCEL' | 'ADD'
 }
 
+export const List = styled.ul`
+  display: flex;
+  flex-direction: column;
+  gap: 1.3em;
+`
+
 export const Item = styled.li`
-  display: block;
-  text-transform: capitalize;
-  position: relative;
-  padding-right: 35px;
+  display: flex;
   cursor: pointer;
+  justify-content: space-between;
+  align-items: center;
+  text-transform: capitalize;
+  padding: 8px;
   font-size: 22px;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  border: 1px solid black;
+  border-radius: 8px;
+  background-color: ${colors.gray};
+
+  div {
+    display: flex;
+    align-items: center;
+
+    span {
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  label {
+    cursor: pointer;
+  }
 
   input {
-    position: absolute;
     opacity: 0;
     cursor: pointer;
     height: 0;
@@ -27,13 +50,12 @@ export const Item = styled.li`
   }
 
   .checkmark {
-    position: absolute;
-    top: 0;
-    right: 0;
+    display: flex;
     height: 30px;
     width: 30px;
     background-color: #eee;
     border-radius: 50%;
+    border: 1px solid #000;
   }
 
   &:hover input ~ .checkmark {
@@ -46,7 +68,6 @@ export const Item = styled.li`
 
   .checkmark:after {
     content: '';
-    position: absolute;
     display: none;
   }
 
@@ -55,8 +76,6 @@ export const Item = styled.li`
   }
 
   .checkmark:after {
-    top: 10px;
-    left: 10px;
     width: 10px;
     height: 10px;
     border-radius: 50%;
